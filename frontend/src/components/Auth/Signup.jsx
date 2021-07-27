@@ -1,149 +1,101 @@
-import React, { useState } from "react";
-import { Link, useHistory } from "react-router-dom";
+// import React, { useState } from "react";
+// import { useDispatch, useSelector } from "react-redux";
+// import { Redirect } from "react-router";
+// import styled from "styled-components";
+// import { userRegister } from "../redux/register/action";
 
-import { connect } from "react-redux";
+// const LForm = styled.div`
+//   form {
+//     width: 500px;
+//     display: flex;
+//     gap: 20px;
+//     flex-direction: column;
+//   }
+//   input {
+//     border: none;
+//     outline: none;
+//     border-bottom: 2px solid;
+//     height: 35px;
+//     font-size: 20px;
+//     padding-left: 20px;
+//     margin: 20px, auto;
+//   }
+//   button {
+//     background: #41af7d;
+//     cursor: pointer;
+//     border-radius: 5px;
+//   }
+// `;
 
-import styled from "styled-components";
+// export default function Registration() {
+//   const { message } = useSelector((state) => state.register);
+//   const [form, setForm] = useState("");
 
-import {userRegister} from "../register/action"
+//   const dispatch = useDispatch();
 
-const LForm = styled.div`
-  form {
-    width: 500px;
-    display: flex;
-    gap: 20px;
-    flex-direction: column;
-  }
-  input {
-    border: none;
-    outline: none;
-    border-bottom: 2px solid;
-    height: 35px;
-    font-size: 20px;
-    padding-left: 20px;
-    margin: 20px, auto;
-  }
-  button {
-    background: #41af7d;
-    cursor: pointer;
-    border-radius: 5px;
-  }
-`;
+//   const handleChange = (e) => {
+//     const { name, value } = e.target;
 
-export default function Signup(props) {
+//     setForm({ ...form, [name]: value });
+//   };
 
-  const [state, setState] = useState({
-    name: "",
-    email: "",
-    password: "",
+//   const handleOnSubmit = (e) => {
+//     e.preventDefault();
+//     // setForm("");
+//     dispatch(userRegister(form));
+//     //console.log(form);
+//   };
 
-    errors: {
-      name: "",
-      email: "",
-      password: "",
-    },
-  });
-
-    const history = useHistory();
-
-    const handleChange = (event) => {
-      const { name, value } = event.target;
-      const errors = { ...state.errors };
-      switch (name) {
-        case "email":
-          errors.email =
-            value.indexOf("@") === -1 ? "email must be include @ " : "";
-          break;
-        case "password":
-          let passwordError;
-          let vr = /^(?=.*[A-Za-z])(?=.*\d)[A-Za-z\d]/;
-          if (value.length < 6) {
-            passwordError = "password must b included 6 charecters";
-          }
-          if (!vr.test(value)) {
-            passwordError =
-              "password must be include 8 at least one letter, one number and one special character";
-          }
-          errors.password = passwordError;
-          break;
-        case "phone":
-          if (/^\d{10}$/.test(value)) {
-            errors.phone = "";
-          } else {
-            errors.phone = "Invalid number; must be ten digits";
-          }
-          break;
-        default:
-          break;
-      }
-      setState({ ...state, [name]: value, errors });
-    };
-    const { name, email, password, phone, errors } = state;
-
-    const handleSubmit = async (event) => {
-      event.preventDefault();
-      console.log(history);
-      const data = await props.dispatch(
-        userRegister({
-          name,
-          email,
-          password,
-        })
-      );
-      console.log(data);
-      if (data) {
-        history.push("/login");
-      }
-    };
-
-  return (
-    <section>
-      <div className="container">
-        <form className="flex-40" onSubmit={handleSubmit}>
-          <h2>CREATE ACCOUNT</h2>
-          <div className="form-control">
-            <input
-              type="text"
-              name="name"
-              placeholder="user name"
-              className="form-control"
-              value={name}
-              onChange={handleChange}
-            />
-            <span className="text-red-500">{errors.firstName}</span>
-          </div>
-          <div className="form-control">
-            <input
-              type="email"
-              name="email"
-              placeholder="Email"
-              value={email}
-              onChange={handleChange}
-              className="form-control"
-            />
-            <span className="text-red-500">{errors.email}</span>
-          </div>
-          <div className="form-control">
-            <input
-              type="password"
-              name="password"
-              placeholder="Password"
-              value={password}
-              onChange={handleChange}
-              className="form-control"
-            />
-            <span className="text-red-500">{errors.password}</span>
-          </div>
-          <div className="form-control">
-            <button className="hover:bg-black rounded" type="submit">
-              CREATE
-            </button>
-          </div>
-          <Link to="/login" className="link">
-            Already have account? login
-          </Link>
-        </form>
-      </div>
-    </section>
-  );
-}
+//   return (
+//     <>
+//       <LForm>
+//         <form onSubmit={handleOnSubmit}>
+//           <input
+//             onChange={handleChange}
+//             type="text"
+//             placeholder="enter your name"
+//             value={form.name}
+//             name="name"
+//           />
+//           <input
+//             onChange={handleChange}
+//             type="text"
+//             placeholder="enter your email"
+//             value={form.email}
+//             name="email"
+//           />
+//           <input
+//             onChange={handleChange}
+//             type="password"
+//             placeholder="enter yor password"
+//             name="password"
+//             value={form.password}
+//           />
+//           <input
+//             onChange={handleChange}
+//             type="text"
+//             placeholder="enter yor username"
+//             name="username"
+//             value={form.username}
+//           />
+//           <input
+//             onChange={handleChange}
+//             type="number"
+//             placeholder="enter yor mobile"
+//             name="mobile"
+//             value={form.mobile}
+//           />
+//           <textarea
+//             onChange={handleChange}
+//             type="text"
+//             name="description"
+//             placeholder="Enter description here..."
+//             value={form.description}
+//           ></textarea>
+//           <button type="submit">REGISTER</button>
+//         </form>
+//       </LForm>
+//       {message === "Registration Success" && <Redirect to="/login" />}
+//     </>
+//   );
+// }
